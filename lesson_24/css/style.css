@@ -1,0 +1,406 @@
+/* ==========================================================
+   Колледж — оформление сайта
+   Только CSS: разметка (index.html) и скрипты не менялись.
+   ========================================================== */
+
+:root {
+    --bg: #f3f4fb;
+    --surface: #ffffff;
+    --surface-2: #f8f9fe;
+    --text: #1a1d33;
+    --muted: #6a6f91;
+    --border: #e2e4f1;
+
+    --accent: #5b5ff0;
+    --accent-hover: #4a4ee0;
+    --accent-soft: #eceeff;
+    --on-accent: #ffffff;
+
+    --danger: #e0244f;
+    --danger-hover: #c61b43;
+    --danger-soft: #ffe9ee;
+
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(26, 29, 51, .05), 0 8px 24px rgba(26, 29, 51, .06);
+    --ring: 0 0 0 3px rgba(91, 95, 240, .28);
+
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0e1020;
+        --surface: #171a2f;
+        --surface-2: #1d2140;
+        --text: #e8eaf8;
+        --muted: #9a9fc4;
+        --border: #2a2f52;
+
+        --accent: #6a6ef5;
+        --accent-hover: #7d81f8;
+        --accent-soft: #23274d;
+
+        --danger: #f0486d;
+        --danger-hover: #ff6384;
+        --danger-soft: #3a1b29;
+
+        --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+        --ring: 0 0 0 3px rgba(106, 110, 245, .45);
+    }
+}
+
+/* ---------- База ---------- */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font);
+    line-height: 1.5;
+    color: var(--text);
+    background:
+        radial-gradient(900px 420px at 10% -10%, var(--accent-soft), transparent 70%),
+        var(--bg);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Шапка ---------- */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem max(1.25rem, calc((100% - 1100px) / 2 + 1.25rem));
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Логотип-надпись, добавленная чистым CSS */
+header::before {
+    content: "Колледж";
+    margin-right: auto;
+    padding-left: 2.1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    background:
+        linear-gradient(135deg, var(--accent), #a855f7) left center / 1.5rem 1.5rem no-repeat;
+    border-radius: 6px;
+    background-clip: border-box;
+}
+
+header button {
+    padding: .5rem 1.1rem;
+    font: inherit;
+    font-weight: 600;
+    font-size: .95rem;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s, transform .1s;
+}
+
+header button:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+}
+
+header button:active {
+    transform: scale(.97);
+}
+
+header button:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+/* ---------- Контент ---------- */
+
+main {
+    flex: 1;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 1.25rem;
+    align-items: start;
+}
+
+/* Подсказка, пока ни одна таблица не открыта */
+main::before {
+    content: "Выберите раздел вверху, чтобы увидеть список.";
+    grid-column: 1 / -1;
+    padding: 1.1rem 1.4rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+}
+
+main:has(table[style*="flex"])::before {
+    display: none;
+}
+
+/* ---------- Таблицы ----------
+   Скрипт включает их через style="display: flex", что ломает
+   табличную вёрстку, поэтому возвращаем display: table. */
+
+table {
+    grid-column: 1 / -1;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+table[style*="flex"] {
+    display: table !important;
+}
+
+th,
+td {
+    padding: .85rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface-2);
+}
+
+tbody tr {
+    transition: background .12s;
+}
+
+tbody tr:hover {
+    background: var(--accent-soft);
+}
+
+tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+td:first-child,
+th:first-child {
+    width: 5rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Карточки с формами ---------- */
+
+section {
+    padding: 1.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+section > p {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+}
+
+section > p::before {
+    content: "";
+    display: inline-block;
+    width: .5rem;
+    height: .5rem;
+    margin-right: .6rem;
+    vertical-align: middle;
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+form {
+    display: grid;
+    gap: .9rem;
+    margin: 0;
+}
+
+section > form + button {
+    margin-top: 1.1rem;
+}
+
+label {
+    display: grid;
+    gap: .35rem;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+input {
+    width: 100%;
+    padding: .65rem .85rem;
+    font: inherit;
+    font-size: .95rem;
+    font-weight: 400;
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color .15s, box-shadow .15s, background .15s;
+}
+
+input::placeholder {
+    color: var(--muted);
+    opacity: .6;
+}
+
+input:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+input:focus {
+    outline: none;
+    background: var(--surface);
+    border-color: var(--accent);
+    box-shadow: var(--ring);
+}
+
+/* ---------- Кнопки в карточках ---------- */
+
+section button {
+    width: 100%;
+    padding: .7rem 1.2rem;
+    font: inherit;
+    font-weight: 600;
+    color: var(--on-accent);
+    background: var(--accent);
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s, transform .1s, box-shadow .15s;
+}
+
+section button:hover {
+    background: var(--accent-hover);
+}
+
+section button:active {
+    transform: translateY(1px);
+}
+
+section button:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+/* Последняя карточка — удаление: красный акцент */
+section:last-of-type {
+    border-color: color-mix(in srgb, var(--danger) 30%, var(--border));
+}
+
+section:last-of-type label {
+    color: var(--danger);
+}
+
+section:last-of-type input:focus {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 28%, transparent);
+}
+
+section:last-of-type button {
+    background: var(--danger);
+}
+
+section:last-of-type button:hover {
+    background: var(--danger-hover);
+}
+
+section:last-of-type button:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 35%, transparent);
+}
+
+/* ---------- Подвал и сообщения ---------- */
+
+footer {
+    padding: 1rem 1.25rem 1.5rem;
+    text-align: center;
+    font-size: .9rem;
+    color: var(--muted);
+}
+
+footer p {
+    margin: 0;
+}
+
+footer p:empty {
+    display: none;
+}
+
+#error {
+    color: var(--danger);
+}
+
+/* ---------- Адаптив и доступность ---------- */
+
+@media (max-width: 600px) {
+    header {
+        flex-wrap: wrap;
+        padding: .7rem 1rem;
+    }
+
+    header::before {
+        width: 100%;
+        margin-bottom: .2rem;
+    }
+
+    header button {
+        flex: 1;
+    }
+
+    main {
+        padding: 1.25rem 1rem 2rem;
+    }
+
+    th,
+    td {
+        padding: .7rem .8rem;
+        font-size: .9rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}
